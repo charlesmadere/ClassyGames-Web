@@ -1,0 +1,4 @@
+# Welcome to the Classy Games-Web repository! #
+This is the web client side for the Classy Games... *game*. The Android application can be found at the [Classy Games repository](https://github.com/ScootrNova/ClassyGames), the web server back end code can be found at the [Classy Games-Server repository](https://github.com/ScootrNova/ClassyGames-Server), and the artwork files and such can be found at the [Classy Games-Resources repository](https://github.com/ScootrNova/ClassyGames-Resources).
+
+The contents of the `public_html` directory is the only part of this project that should ever be directly uploaded to a web server.
