@@ -19,8 +19,8 @@ function loadGamesList()
 			var turnYours = response.result.success.turn_yours;
 			var turnTheirs = response.result.success.turn_theirs;
 
-			loadGamesListTurn(turnYours, "#ClassyGames_GamesList_YourTurn_List");
-			loadGamesListTurn(turnTheirs, "#ClassyGames_GamesList_TheirTurn_List");
+			loadGamesListTurn(turnYours, "#ClassyGames_GamesList_YourTurn_List", true);
+			loadGamesListTurn(turnTheirs, "#ClassyGames_GamesList_TheirTurn_List", false);
 
 			$("#ClassyGames_GamesList_Loading").css("display", "none");
 			$("#ClassyGames_GamesList_ActionBar").css("display", "inline");
@@ -29,7 +29,7 @@ function loadGamesList()
 }
 
 
-function loadGamesListTurn(turn, list)
+function loadGamesListTurn(turn, list, isYourTurn)
 {
 	if (turn.length >= 1)
 	{
@@ -39,9 +39,15 @@ function loadGamesListTurn(turn, list)
 
 		for (var i = 0; i < turn.length; ++i)
 		{
-			var game = new Game(turn[i]);
+			var game = new Game(turn[i], isYourTurn);
 			var html = game.toList();
 			listElement.append(html);
 		}
+	}
+	else
+	{
+		$($(list).parent()).css("display", "none");
+		var listElement = $(list);
+		listElement.html("");
 	}
 }

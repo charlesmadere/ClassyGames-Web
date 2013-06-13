@@ -1,6 +1,7 @@
-function Game(game)
+function Game(game, isYourTurn)
 {
 	this.id = game.game_id;
+	this.isYourTurn = isYourTurn;
 	this.type = game.game_type;
 	this.lastMove = game.last_move;
 	this.person = new Person(game.id, game.name);
@@ -114,7 +115,14 @@ Game.prototype.print = function()
 
 Game.prototype.toList = function()
 {
-	var begin = "<li onclick=\"loadBoard('" + this.id + "', " + this.person.id + ", '" + this.person.name + "');\">";
+	var begin = "<li";
+
+	if (this.isYourTurn)
+	{
+		begin = begin + " onclick=\"loadBoard('" + this.id + "', " + this.person.id + ", '" + this.person.name + "');\"";
+	}
+
+	begin = begin + ">";
 	var img = "<img src=\"https://graph.facebook.com/" + this.person.id + "/picture?type=square\" />";
 	var name = "<div class=\"ClassyGames_GamesList_Game_Name\">" + this.person.name + "</div>";
 	var time = "<div class=\"ClassyGames_GamesList_Game_Time\">" + this.calculateLastMoveTimeAgo() + "</div>";
