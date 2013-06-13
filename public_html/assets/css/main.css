@@ -60,8 +60,17 @@ h2
 
 #ActionBar div a
 {
-	margin-left: 0.5em;
-	margin-right: 0.5em;
+	color: #535A98;
+	font-variant: small-caps;
+	margin-left: 0.75em;
+	margin-right: 0.75em;
+	text-decoration: none;
+}
+
+
+#ActionBar div a:hover
+{
+	color: #A2A3B7;
 }
 
 

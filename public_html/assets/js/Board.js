@@ -309,6 +309,11 @@ Board.prototype.selectPiece = function(coordinate)
 			}
 			else
 			{
+				if (coordinate.y == 7)
+				{
+					this.selectedPiece.ascendToKing();
+				}
+
 				this.selectedPiece.coordinate = coordinate;
 				this.isLocked = true;
 				this.flush();
