@@ -24,6 +24,7 @@ function unhighlightBoardPosition(coordinate)
 function loadBoard(gameId, personId, personName)
 {
 	$("#ClassyGames_GamesList").css("display", "none");
+	$("#ClassyGames_GamesList_ActionBar").css("display", "none");
 	$("#ClassyGames_Board").css("display", "inline");
 
 	// this line requires that google chrome's security feature be disabled
@@ -35,6 +36,7 @@ function loadBoard(gameId, personId, personName)
 		{
 			$("#ClassyGames_Board_Loading").css("display", "none");
 			$("#ClassyGames_Board_Board").css("display", "inline");
+			$("#ClassyGames_Board_ActionBar").css("display", "inline");
 			$("h1").html("Game against " + personName);
 			measureBoard();
 			BOARD = new Board(response);
@@ -238,10 +240,10 @@ Board.prototype.selectPiece = function(coordinate)
 	// player is attempting to move the piece
 	{
 		var pieceCoordinate = this.selectedPiece.coordinate;
-		var changeInX = Math.abs(coordinate.x - pieceCoordinate.x);
+		var changeInX = coordinate.x - pieceCoordinate.x;
 		var changeInY = coordinate.y - pieceCoordinate.y;
 
-		if (changeInX == 1 && (changeInY == 1 || changeInY == -1))
+		if (Math.abs(changeInX) == 1 && (changeInY == 1 || changeInY == -1))
 		// regular move
 		{
 			if (this.selectedPiece.isNormal() && changeInY == -1)
@@ -256,7 +258,7 @@ Board.prototype.selectPiece = function(coordinate)
 				this.flush();
 			}
 		}
-		else if (changeInX == 2 && (changeInX == 2 || changeInY == -2))
+		else if (Math.abs(changeInX) == 2 && (changeInY == 2 || changeInY == -2))
 		// jump move
 		{
 			if (this.selectedPiece.isNormal() && changeInY == -2)

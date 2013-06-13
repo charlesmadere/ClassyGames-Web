@@ -28,6 +28,6 @@ function facebookLogin()
 		MY_FACEBOOK_IDENTITY = new Person(response.id, response.name);
 		$("#Facebook_Login").remove();
 		$("#ActionBar").css("visibility", "visible");
-		loadGamesList(response);
+		loadGamesList();
 	});
 }

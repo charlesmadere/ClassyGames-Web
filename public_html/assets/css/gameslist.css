@@ -24,6 +24,7 @@
 #ClassyGames_GamesList ul li:hover
 {
 	background-color: #DEE5E8;
+	cursor: pointer;
 }
 
 
@@ -55,4 +56,10 @@
 {
 	color: #8A9AA1;
 	text-transform: lowercase;
+}
+
+
+#ClassyGames_GamesList_ActionBar
+{
+	display: none;
 }
