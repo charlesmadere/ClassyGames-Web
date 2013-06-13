@@ -1,31 +1,86 @@
+html
+{
+	background-color: #DDDDDD;
+	height: 100%;
+	overflow-y: scroll;
+	width: 100%;
+}
+
+
 body
 {
-	background-image: url("../img/background.png");
+	background-color: #FFFFFF;
 	font-family: Arial, Helvetica, sans-serif;
+	height: 100%;
 	margin-left: auto;
 	margin-right: auto;
-	max-width: 40em;
+	margin-top: 0em;
+	max-width: 32em;
 	padding-left: 1em;
 	padding-right: 1em;
 }
 
 
-h1, h2, h3
+h1, h2
 {
 	font-family: Arial, Helvetica, sans-serif;
 	text-align: center;
 }
 
 
-.fb-login-button
+h1
 {
-	margin-left: auto;
-	margin-right: auto;
-	width: 8em;
+	margin-top: 0em;
 }
 
 
 #ClassyGames_GamesList, #ClassyGames_GamesList_YourTurn, #ClassyGames_GamesList_TheirTurn
 {
 	display: none;
+}
+
+
+#ClassyGames_GamesList ul
+{
+	list-style-type: none;
+}
+
+
+#ClassyGames_GamesList ul li
+{
+	margin-bottom: 1.5em;
+	margin-top: 1.5em;
+}
+
+
+#ClassyGames_GamesList div ul li img
+{
+	float: left;
+	margin-right: 5%;
+	width: 12%;
+}
+
+
+.ClassyGames_GamesList_Game_Name
+{
+	color: #677379;
+	float: left;
+	font-weight: bold;
+	text-transform: uppercase;
+	width: 83%;
+}
+
+
+.ClassyGames_GamesList_Game_Time
+{
+	color: #8A9AA1;
+	float: left;
+	text-transform: lowercase;
+	width: 83%;
+}
+
+
+div.clear
+{
+	clear: both;
 }

@@ -7,21 +7,29 @@
 		<meta charset="utf-8" />
 		<script src="assets/js/jquery.js" type="text/javascript"></script>
 		<script src="assets/js/main.js" type="text/javascript"></script>
+		<script src="assets/js/Game.js" type="text/javascript"></script>
+		<script src="assets/js/Person.js" type="text/javascript"></script>
 		<link href="assets/css/main.css" rel="stylesheet" type="text/css" />
 	</head>
 
 	<body>
 		<div id="fb-root"></div>
 		<h1>Classy Games</h1>
-		<h2>Please login with Facebook to play!</h2>
-		<div class="fb-login-button" data-size="large"></div>
+		<div id="Facebook_Login">
+			<h2>Please login with Facebook to play!</h2>
+			<div class="fb-login-button" data-size="large"></div>
+		</div>
 		<div id="ClassyGames_GamesList">
-			<div id="ClassyGames_GamesList_Loading">Loading your games list...</div>
+			<div id="ClassyGames_GamesList_Loading">
+				<h2>Loading your games list...</h2>
+			</div>
 			<div id="ClassyGames_GamesList_YourTurn">
-				<h3>Your Turn</h3>
+				<h2>Your Turn</h2>
+				<ul id="ClassyGames_GamesList_YourTurn_List"></ul>
 			</div>
 			<div id="ClassyGames_GamesList_TheirTurn">
-				<h3>Their Turn</h3>
+				<h2>Their Turn</h2>
+				<ul id="ClassyGames_GamesList_TheirTurn_List"></ul>
 			</div>
 		</div>
 	</body>
