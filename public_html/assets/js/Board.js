@@ -87,8 +87,8 @@ function measureBoard()
 
 function selectBoardPosition(position)
 {
-	var x = position.getAttribute("data-x");
-	var y = position.getAttribute("data-y");
+	var x = Math.round(position.getAttribute("data-x"));
+	var y = Math.round(position.getAttribute("data-y"));
 	var coordinate = new Coordinate(x, y);
 
 	if (coordinate.isWhitePosition() && !BOARD.isLocked)
@@ -112,7 +112,7 @@ function Board(response)
 	this.teamOpponent = this.buildTeam(2, this.teams[1]);
 
 	this.isLocked = false;
-	this.movedPiece = null;
+	this.lastMovedCoordinate = null;
 	this.selectedPiece = null;
 }
 
@@ -201,26 +201,29 @@ Board.prototype.flushTeam = function(board, team)
 		var piece = team[i];
 		var position = findBoardPosition(piece.coordinate);
 
-		if (piece.isPlayers())
+		if (piece.isAlive)
 		{
-			if (piece.isNormal())
+			if (piece.isPlayers())
 			{
-				position.html("<img src=\"assets/img/game/normal/pink/piece.png\" />");
+				if (piece.isNormal())
+				{
+					position.html("<img src=\"assets/img/game/normal/pink/piece.png\" style=\"margin-top: 12%;\" />");
+				}
+				else
+				{
+					position.html("<img src=\"assets/img/game/king/pink/piece.png\" style=\"margin-top: 4%;\" />");
+				}
 			}
 			else
 			{
-				position.html("<img src=\"assets/img/game/king/pink/piece.png\" />");
-			}
-		}
-		else
-		{
-			if (piece.isNormal())
-			{
-				position.html("<img src=\"assets/img/game/normal/blue/piece.png\" />");
-			}
-			else
-			{
-				position.html("<img src=\"assets/img/game/king/blue/piece.png\" />");
+				if (piece.isNormal())
+				{
+					position.html("<img src=\"assets/img/game/normal/blue/piece.png\" style=\"margin-top: 12%;\" />");
+				}
+				else
+				{
+					position.html("<img src=\"assets/img/game/king/blue/piece.png\" style=\"margin-top: 4%;\" />");
+				}
 			}
 		}
 	}
@@ -232,6 +235,7 @@ Board.prototype.selectPiece = function(coordinate)
 	var piece = this.findPieceAtPosition(coordinate);
 
 	if (this.selectedPiece == null && piece != null && piece.isPlayers())
+	// player has selected a piece
 	{
 		this.selectedPiece = piece;
 		highlightBoardPosition(coordinate);
@@ -243,7 +247,7 @@ Board.prototype.selectPiece = function(coordinate)
 		var changeInX = coordinate.x - pieceCoordinate.x;
 		var changeInY = coordinate.y - pieceCoordinate.y;
 
-		if (Math.abs(changeInX) == 1 && (changeInY == 1 || changeInY == -1))
+		if (this.lastMovedCoordinate == null && Math.abs(changeInX) == 1 && (changeInY == 1 || changeInY == -1))
 		// regular move
 		{
 			if (this.selectedPiece.isNormal() && changeInY == -1)
@@ -253,7 +257,6 @@ Board.prototype.selectPiece = function(coordinate)
 			else
 			{
 				this.selectedPiece.coordinate = coordinate;
-				this.movedPiece = this.selectedPiece;
 				this.isLocked = true;
 				this.flush();
 			}
@@ -267,9 +270,35 @@ Board.prototype.selectPiece = function(coordinate)
 			}
 			else
 			{
-				this.selectedPiece.coordinate = coordinate;
-				this.movedPiece = this.selectedPiece;
-				this.flush();
+				var newX = (pieceCoordinate.x + coordinate.x) / 2;
+				var newY = (pieceCoordinate.y + coordinate.y) / 2;
+				var middleCoordinate = new Coordinate(newX, newY);
+				var middlePiece = this.findPieceAtPosition(middleCoordinate);
+
+				if (this.lastMovedCoordinate == null || this.lastMovedCoordinate.equals(this.selectedPiece.coordinate))
+				{
+					if (middlePiece != null && middlePiece.isOpponents())
+					{
+						middlePiece.kill();
+
+						if (coordinate.y == 7)
+						{
+							this.selectedPiece.ascendToKing();
+						}
+
+						this.lastMovedCoordinate = coordinate;
+						this.selectedPiece.coordinate = coordinate;
+						this.flush();
+					}
+					else
+					{
+						this.unselectPiece();
+					}
+				}
+				else
+				{
+					this.unselectPiece();
+				}
 			}
 		}
 		else
@@ -277,7 +306,6 @@ Board.prototype.selectPiece = function(coordinate)
 		{
 			this.unselectPiece();
 		}
-
 	}
 	else
 	{

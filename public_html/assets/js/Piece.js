@@ -3,6 +3,14 @@ function Piece(team, piece)
 	this.coordinate = new Coordinate(piece.coordinate[0], piece.coordinate[1]);
 	this.team = team;
 	this.type = piece.type;
+
+	this.isAlive = true;
+}
+
+
+Piece.prototype.ascendToKing = function()
+{
+	this.type = 2;
 }
 
 
@@ -27,4 +35,10 @@ Piece.prototype.isPlayers = function()
 Piece.prototype.isOpponents = function()
 {
 	return this.team == 2;
+}
+
+
+Piece.prototype.kill = function()
+{
+	this.isAlive = false;
 }
