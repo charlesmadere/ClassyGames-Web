@@ -42,3 +42,9 @@ Piece.prototype.kill = function()
 {
 	this.isAlive = false;
 }
+
+
+Piece.prototype.makeJSON = function()
+{
+	return this.coordinate.makeJSON() + ",\"type\":" + this.type;
+}

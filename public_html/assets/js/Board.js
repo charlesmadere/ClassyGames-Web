@@ -240,9 +240,46 @@ Board.prototype.flushTeam = function(board, team)
 }
 
 
-Board.prototype.makeBoardJSON = function()
+Board.prototype.makeJSON = function()
 {
-	return "blah";
+	var board = "{\"board\":{" + this.makeJSONTeams() + "}}";
+	return board;
+}
+
+
+Board.prototype.makeJSONTeams = function()
+{
+	var teams = "\"teams\":[" + this.makeJSONTeam(this.teamOpponent) + this.makeJSONTeam(this.teamPlayer) + "]";
+	return teams;
+}
+
+
+Board.prototype.makeJSONTeam = function(team)
+{
+	var pieces = "";
+
+	for (var i = 0; i < team.length; )
+	{
+		var piece = team[i];
+
+		if (piece.isAlive)
+		{
+			var pieceJSON = "{" + piece.makeJSON() + "}";
+
+			if (++i < team.length)
+			{
+				pieceJSON = pieceJSON + ",";
+			}
+
+			pieces = pieces + pieceJSON;
+		}
+		else
+		{
+			++i;
+		}
+	}
+
+	return "[" + pieces + "]";
 }
 
 
@@ -341,7 +378,7 @@ Board.prototype.send = function()
 				name: this.person.name,
 				user_creator: MY_FACEBOOK_IDENTITY.id,
 				game_id: this.gameId,
-				board: this.makeBoardJSON()
+				board: this.makeJSON()
 			},
 			function(response)
 			{

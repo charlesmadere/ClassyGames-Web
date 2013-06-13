@@ -43,3 +43,9 @@ Coordinate.prototype.isWhitePosition = function()
 		}
 	}
 }
+
+
+Coordinate.prototype.makeJSON = function()
+{
+	return "\"coordinate\":[" + this.x + "," + this.y + "]";
+}
