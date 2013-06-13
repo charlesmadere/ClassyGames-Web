@@ -1,0 +1,57 @@
+#ClassyGames_GamesList, #ClassyGames_GamesList_YourTurn, #ClassyGames_GamesList_TheirTurn
+{
+	display: none;
+}
+
+
+#ClassyGames_GamesList ul
+{
+	list-style-type: none;
+	margin-left: 2em;
+	margin-right: 2em;
+	padding-left: 0em;
+}
+
+
+#ClassyGames_GamesList ul li
+{
+	margin-bottom: 1.5em;
+	margin-top: 1.5em;
+}
+
+
+#ClassyGames_GamesList ul li:hover
+{
+	background-color: #DEE5E8;
+}
+
+
+#ClassyGames_GamesList div ul li img
+{
+	float: left;
+	margin-right: 5%;
+	width: 12%;
+}
+
+
+.ClassyGames_GamesList_Game_Name, .ClassyGames_GamesList_Game_Time
+{
+	float: left;
+	letter-spacing: 0.08em;
+	width: 83%;
+}
+
+
+.ClassyGames_GamesList_Game_Name
+{
+	color: #677379;
+	font-weight: bold;
+	text-transform: uppercase;
+}
+
+
+.ClassyGames_GamesList_Game_Time
+{
+	color: #8A9AA1;
+	text-transform: lowercase;
+}

@@ -114,7 +114,7 @@ Game.prototype.print = function()
 
 Game.prototype.toList = function(currentTime)
 {
-	var begin = "<li onclick=\"loadGame('" + this.id + "');\">";
+	var begin = "<li onclick=\"loadBoard('" + this.id + "');\">";
 	var img = "<img src=\"https://graph.facebook.com/" + this.person.id + "/picture?type=square\" />";
 	var name = "<div class=\"ClassyGames_GamesList_Game_Name\">" + this.person.name + "</div>";
 	var time = "<div class=\"ClassyGames_GamesList_Game_Time\">" + this.calculateLastMoveTimeAgo(currentTime) + "</div>";

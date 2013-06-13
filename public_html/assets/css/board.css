@@ -1,0 +1,33 @@
+#ClassyGames_Board
+{
+	display: none;
+}
+
+
+#ClassyGames_Board_Board
+{
+	box-shadow: 0em 0em 1em #666666;
+	display: none;
+	margin-bottom: 2em;
+	margin-left: auto;
+	margin-right: auto;
+	max-width: 88%;
+}
+
+
+.ClassyGames_Board_Board_Position_Black
+{
+	background-color: #666666;
+	float: left;
+	height: 100%;
+	width: 12.5%;
+}
+
+
+.ClassyGames_Board_Board_Position_White
+{
+	background-color: #FFFFFF;
+	float: left;
+	height: 100%;
+	width: 12.5%;
+}
