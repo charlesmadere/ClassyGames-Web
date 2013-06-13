@@ -108,6 +108,13 @@ function Board(response)
 	this.json = JSON.parse(this.response);
 	this.board = this.json.board;
 	this.teams = this.board.teams;
+
+	this.build();
+}
+
+
+Board.prototype.build = function()
+{
 	this.teamPlayer = this.buildTeam(1, this.teams[0]);
 	this.teamOpponent = this.buildTeam(2, this.teams[1]);
 
@@ -132,9 +139,9 @@ Board.prototype.buildTeam = function(team, array)
 
 Board.prototype.eraseBoard = function(board)
 {
-	for (var x = 0; x < 7; ++x)
+	for (var x = 0; x <= 7; ++x)
 	{
-		for (var y = 0; y < 7; ++y)
+		for (var y = 0; y <= 7; ++y)
 		{
 			var coordinate = new Coordinate(x, y);
 			var position = findBoardPosition(coordinate);
@@ -277,7 +284,7 @@ Board.prototype.selectPiece = function(coordinate)
 
 				if (this.lastMovedCoordinate == null || this.lastMovedCoordinate.equals(this.selectedPiece.coordinate))
 				{
-					if (middlePiece != null && middlePiece.isOpponents())
+					if (middlePiece != null && middlePiece.isOpponents() && middlePiece.isAlive)
 					{
 						middlePiece.kill();
 
@@ -311,6 +318,13 @@ Board.prototype.selectPiece = function(coordinate)
 	{
 		this.unselectPiece();
 	}
+}
+
+
+Board.prototype.undo = function()
+{
+	this.build();
+	this.flush();
 }
 
 
