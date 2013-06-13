@@ -10,7 +10,14 @@ function findBoardPosition(coordinate)
 function highlightBoardPosition(coordinate)
 {
 	var position = findBoardPosition(coordinate);
-	position.css("background-color", "#FFFF00")
+	position.css("background-color", "#FFCCCC")
+}
+
+
+function unhighlightBoardPosition(coordinate)
+{
+	var position = findBoardPosition(coordinate);
+	position.css("background-color", "#FFFFFF");
 }
 
 
@@ -24,7 +31,8 @@ function loadBoard(gameId, personId, personName)
 		{
 			id: gameId
 		},
-		function(response) {
+		function(response)
+		{
 			$("#ClassyGames_Board_Loading").css("display", "none");
 			$("#ClassyGames_Board_Board").css("display", "inline");
 			$("h1").html("Game against " + personName);
@@ -81,13 +89,13 @@ function selectBoardPosition(position)
 	var y = position.getAttribute("data-y");
 	var coordinate = new Coordinate(x, y);
 
-	if (coordinate.isWhitePosition())
+	if (coordinate.isWhitePosition() && !BOARD.isLocked)
 	{
 		BOARD.selectPiece(coordinate);
 	}
 	else
 	{
-		BOARD.unselectPieces();
+		BOARD.unselectPiece();
 	}
 }
 
@@ -101,8 +109,9 @@ function Board(response)
 	this.teamPlayer = this.buildTeam(1, this.teams[0]);
 	this.teamOpponent = this.buildTeam(2, this.teams[1]);
 
-	this.previousPiece = null;
-	this.currentPiece = null;
+	this.isLocked = false;
+	this.movedPiece = null;
+	this.selectedPiece = null;
 }
 
 
@@ -119,12 +128,33 @@ Board.prototype.buildTeam = function(team, array)
 }
 
 
+Board.prototype.eraseBoard = function(board)
+{
+	for (var x = 0; x < 7; ++x)
+	{
+		for (var y = 0; y < 7; ++y)
+		{
+			var coordinate = new Coordinate(x, y);
+			var position = findBoardPosition(coordinate);
+			position.html("");
+
+			if (coordinate.isWhitePosition())
+			{
+				position.css("background-color", "#FFFFFF");
+			}
+		}
+	}
+}
+
+
 Board.prototype.findPieceAtPosition = function(coordinate)
 {
 	var piece = this.findTeamPieceAtPosition(coordinate, this.teamPlayer);
 
 	if (piece != null)
+	{
 		return piece;
+	}
 
 	piece = this.findTeamPieceAtPosition(coordinate, this.teamOpponent);
 
@@ -138,8 +168,10 @@ Board.prototype.findTeamPieceAtPosition = function(coordinate, team)
 	{
 		var piece = team[i];
 
-		if (piece.coordinate.x === coordinate.x && piece.coordinate.y === coordinate.y)
+		if (piece.coordinate.equals(coordinate))
+		{
 			return piece;
+		}
 	}
 
 	return null;
@@ -149,9 +181,14 @@ Board.prototype.findTeamPieceAtPosition = function(coordinate, team)
 Board.prototype.flush = function()
 {
 	var board = $("#ClassyGames_Board_Board");
-
+	this.eraseBoard(board);
 	this.flushTeam(board, this.teamPlayer);
 	this.flushTeam(board, this.teamOpponent);
+
+	if (this.selectedPiece != null)
+	{
+		highlightBoardPosition(this.selectedPiece.coordinate);
+	}
 }
 
 
@@ -162,9 +199,9 @@ Board.prototype.flushTeam = function(board, team)
 		var piece = team[i];
 		var position = findBoardPosition(piece.coordinate);
 
-		if (piece.isPlayerPiece())
+		if (piece.isPlayers())
 		{
-			if (piece.isNormalPiece())
+			if (piece.isNormal())
 			{
 				position.html("<img src=\"assets/img/game/normal/pink/piece.png\" />");
 			}
@@ -175,7 +212,7 @@ Board.prototype.flushTeam = function(board, team)
 		}
 		else
 		{
-			if (piece.isNormalPiece())
+			if (piece.isNormal())
 			{
 				position.html("<img src=\"assets/img/game/normal/blue/piece.png\" />");
 			}
@@ -192,31 +229,67 @@ Board.prototype.selectPiece = function(coordinate)
 {
 	var piece = this.findPieceAtPosition(coordinate);
 
-	if (this.previousPiece == null)
+	if (this.selectedPiece == null && piece != null && piece.isPlayers())
 	{
-		if (piece != null)
+		this.selectedPiece = piece;
+		highlightBoardPosition(coordinate);
+	}
+	else if (this.selectedPiece != null && piece == null)
+	// player is attempting to move the piece
+	{
+		var pieceCoordinate = this.selectedPiece.coordinate;
+		var changeInX = Math.abs(coordinate.x - pieceCoordinate.x);
+		var changeInY = coordinate.y - pieceCoordinate.y;
+
+		if (changeInX == 1 && (changeInY == 1 || changeInY == -1))
+		// regular move
 		{
-			this.previousPiece = piece;
-			highlightBoardPosition(coordinate);
+			if (this.selectedPiece.isNormal() && changeInY == -1)
+			{
+				this.unselectPiece();
+			}
+			else
+			{
+				this.selectedPiece.coordinate = coordinate;
+				this.movedPiece = this.selectedPiece;
+				this.isLocked = true;
+				this.flush();
+			}
 		}
+		else if (changeInX == 2 && (changeInX == 2 || changeInY == -2))
+		// jump move
+		{
+			if (this.selectedPiece.isNormal() && changeInY == -2)
+			{
+				this.unselectPiece();
+			}
+			else
+			{
+				this.selectedPiece.coordinate = coordinate;
+				this.movedPiece = this.selectedPiece;
+				this.flush();
+			}
+		}
+		else
+		// invalid move
+		{
+			this.unselectPiece();
+		}
+
 	}
 	else
 	{
-		if (piece == null)
-		{
-			this.previousPiece = null;
-			this.currentPiece = null;
-		}
-		else
-		{
-
-		}
+		this.unselectPiece();
 	}
 }
 
 
-Board.prototype.unselectPieces = function()
+Board.prototype.unselectPiece = function()
 {
-	this.previousPiece = null;
-	this.currentPiece = null;
+	if (this.selectedPiece != null)
+	{
+		unhighlightBoardPosition(this.selectedPiece.coordinate);
+	}
+
+	this.selectedPiece = null;
 }

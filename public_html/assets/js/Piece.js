@@ -6,37 +6,25 @@ function Piece(team, piece)
 }
 
 
-Piece.prototype.isNormalPiece = function()
+Piece.prototype.isNormal = function()
 {
-	return this.type === 1;
+	return this.type == 1;
 }
 
 
-Piece.prototype.isKingPiece = function()
+Piece.prototype.isKing = function()
 {
-	return this.type === 2;
+	return this.type == 2;
 }
 
 
-Piece.prototype.isPlayerPiece = function()
+Piece.prototype.isPlayers = function()
 {
-	return this.team === 1;
+	return this.team == 1;
 }
 
 
-Piece.prototype.isOpponentPiece = function()
+Piece.prototype.isOpponents = function()
 {
-	return this.team === 2;
-}
-
-
-Piece.prototype.getPieceType = function()
-{
-	return this.type;
-}
-
-
-Piece.prototype.getPieceTeam = function()
-{
-	return this.team;
+	return this.team == 2;
 }

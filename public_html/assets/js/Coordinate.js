@@ -5,11 +5,24 @@ function Coordinate(x, y)
 }
 
 
+Coordinate.prototype.equals = function(coordinate)
+{
+	if (this.x == coordinate.x && this.y == coordinate.y)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+
 Coordinate.prototype.isWhitePosition = function()
 {
-	if (this.x % 2 === 0)
+	if (this.x % 2 == 0)
 	{
-		if (this.y % 2 === 0)
+		if (this.y % 2 == 0)
 		{
 			return false;
 		}
@@ -20,7 +33,7 @@ Coordinate.prototype.isWhitePosition = function()
 	}
 	else
 	{
-		if (this.y % 2 === 0)
+		if (this.y % 2 == 0)
 		{
 			return true;
 		}
