@@ -1,4 +1,4 @@
-function loadBoard(gameId)
+function loadBoard(gameId, personId, personName)
 {
 	$("#ClassyGames_GamesList").css("display", "none");
 	$("#ClassyGames_Board").css("display", "inline");
@@ -11,7 +11,8 @@ function loadBoard(gameId)
 		function(response) {
 			$("#ClassyGames_Board_Loading").css("display", "none");
 			$("#ClassyGames_Board_Board").css("display", "inline");
-			// measureBoard();
+			$("h1").html("Game against " + personName);
+			measureBoard();
 		}
 	);
 }
@@ -19,18 +20,20 @@ function loadBoard(gameId)
 
 function measureBoard()
 {
+	var body = $("body");
+	var bodyWidth = body.width();
 	var board = $("#ClassyGames_Board_Board");
-	var boardWidth = board.width();
-	board.height(boardWidth);
+	board.height(bodyWidth);
+	board.width(bodyWidth);
 
-	var rows = board.childNodes;
-	var rowHeight = boardWidth / 8;
+	var rows = board.children();
+	var rowHeight = bodyWidth / 8;
 
 	for (var i = 0; i < rows.length; ++i)
 	{
 		var row = rows[i];
 
-		if (row.className == "ClassyGames_Board_Board_Row")
+		if (row.className === "ClassyGames_Board_Board_Row")
 		{
 			row.style.height = rowHeight + "px";
 			var positions = row.childNodes;
@@ -44,7 +47,7 @@ function measureBoard()
 				{
 					var pieceImage = piece[k];
 
-					if (pieceImage.tagName == "IMG")
+					if (pieceImage.tagName === "IMG")
 					{
 						resizePieceImage(pieceImage, rowHeight);
 					}
