@@ -249,7 +249,7 @@ Board.prototype.makeJSON = function()
 
 Board.prototype.makeJSONTeams = function()
 {
-	var teams = "\"teams\":[" + this.makeJSONTeam(this.teamOpponent) + this.makeJSONTeam(this.teamPlayer) + "]";
+	var teams = "\"teams\":[" + this.makeJSONTeam(this.teamOpponent) + "," + this.makeJSONTeam(this.teamPlayer) + "]";
 	return teams;
 }
 

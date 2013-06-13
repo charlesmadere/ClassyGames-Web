@@ -1,3 +1,6 @@
+var CURRENT_TIME;
+
+
 function loadGamesList()
 {
 	$("h1").html("Games List");

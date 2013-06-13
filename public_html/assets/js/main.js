@@ -1,5 +1,4 @@
 var MY_FACEBOOK_IDENTITY;
-var CURRENT_TIME;
 
 
 $(document).ready(function() {
