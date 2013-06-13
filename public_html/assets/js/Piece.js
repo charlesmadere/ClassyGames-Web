@@ -1,6 +1,6 @@
 function Piece(team, piece)
 {
-	this.coordinate = new Coordinate(piece.coordinate);
+	this.coordinate = new Coordinate(piece.coordinate[0], piece.coordinate[1]);
 	this.team = team;
 	this.type = piece.type;
 }

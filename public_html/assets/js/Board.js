@@ -1,6 +1,19 @@
 var BOARD;
 
 
+function findBoardPosition(coordinate)
+{
+	return $("[data-x=" + coordinate.x + "][data-y=" + coordinate.y + "]");
+}
+
+
+function highlightBoardPosition(coordinate)
+{
+	var position = findBoardPosition(coordinate);
+	position.css("background-color", "#FFFF00")
+}
+
+
 function loadBoard(gameId, personId, personName)
 {
 	$("#ClassyGames_GamesList").css("display", "none");
@@ -54,11 +67,6 @@ function measureBoard()
 					for (var k = 0; k < piece.length; ++k)
 					{
 						var pieceImage = piece[k];
-
-						if (pieceImage.tagName === "IMG")
-						{
-							resizePieceImage(pieceImage, rowHeight);
-						}
 					}
 				}
 			}
@@ -71,7 +79,16 @@ function selectBoardPosition(position)
 {
 	var x = position.getAttribute("data-x");
 	var y = position.getAttribute("data-y");
-	alert("(" + x + ", " + y + ")");
+	var coordinate = new Coordinate(x, y);
+
+	if (coordinate.isWhitePosition())
+	{
+		BOARD.selectPiece(coordinate);
+	}
+	else
+	{
+		BOARD.unselectPieces();
+	}
 }
 
 
@@ -83,6 +100,9 @@ function Board(response)
 	this.teams = this.board.teams;
 	this.teamPlayer = this.buildTeam(1, this.teams[0]);
 	this.teamOpponent = this.buildTeam(2, this.teams[1]);
+
+	this.previousPiece = null;
+	this.currentPiece = null;
 }
 
 
@@ -96,6 +116,33 @@ Board.prototype.buildTeam = function(team, array)
 	}
 
 	return builtTeam;
+}
+
+
+Board.prototype.findPieceAtPosition = function(coordinate)
+{
+	var piece = this.findTeamPieceAtPosition(coordinate, this.teamPlayer);
+
+	if (piece != null)
+		return piece;
+
+	piece = this.findTeamPieceAtPosition(coordinate, this.teamOpponent);
+
+	return piece;
+}
+
+
+Board.prototype.findTeamPieceAtPosition = function(coordinate, team)
+{
+	for (var i = 0; i < team.length; ++i)
+	{
+		var piece = team[i];
+
+		if (piece.coordinate.x === coordinate.x && piece.coordinate.y === coordinate.y)
+			return piece;
+	}
+
+	return null;
 }
 
 
@@ -113,10 +160,7 @@ Board.prototype.flushTeam = function(board, team)
 	for (var i = 0; i < team.length; ++i)
 	{
 		var piece = team[i];
-		var x = piece.coordinate.x;
-		var y = piece.coordinate.y;
-
-		var position = $("[data-x=" + x + "][data-y=" + y + "]");
+		var position = findBoardPosition(piece.coordinate);
 
 		if (piece.isPlayerPiece())
 		{
@@ -141,4 +185,38 @@ Board.prototype.flushTeam = function(board, team)
 			}
 		}
 	}
+}
+
+
+Board.prototype.selectPiece = function(coordinate)
+{
+	var piece = this.findPieceAtPosition(coordinate);
+
+	if (this.previousPiece == null)
+	{
+		if (piece != null)
+		{
+			this.previousPiece = piece;
+			highlightBoardPosition(coordinate);
+		}
+	}
+	else
+	{
+		if (piece == null)
+		{
+			this.previousPiece = null;
+			this.currentPiece = null;
+		}
+		else
+		{
+
+		}
+	}
+}
+
+
+Board.prototype.unselectPieces = function()
+{
+	this.previousPiece = null;
+	this.currentPiece = null;
 }
