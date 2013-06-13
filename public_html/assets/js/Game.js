@@ -7,9 +7,9 @@ function Game(game)
 }
 
 
-Game.prototype.calculateLastMoveTimeAgo = function(currentTime)
+Game.prototype.calculateLastMoveTimeAgo = function()
 {
-	var timeDifference = currentTime - this.lastMove;
+	var timeDifference = CURRENT_TIME - this.lastMove;
 	var timeAgoAsString = timeDifference + " seconds ago";
 
 	// calculate number of weeks
@@ -112,12 +112,12 @@ Game.prototype.print = function()
 }
 
 
-Game.prototype.toList = function(currentTime)
+Game.prototype.toList = function()
 {
 	var begin = "<li onclick=\"loadBoard('" + this.id + "', " + this.person.id + ", '" + this.person.name + "');\">";
 	var img = "<img src=\"https://graph.facebook.com/" + this.person.id + "/picture?type=square\" />";
 	var name = "<div class=\"ClassyGames_GamesList_Game_Name\">" + this.person.name + "</div>";
-	var time = "<div class=\"ClassyGames_GamesList_Game_Time\">" + this.calculateLastMoveTimeAgo(currentTime) + "</div>";
+	var time = "<div class=\"ClassyGames_GamesList_Game_Time\">" + this.calculateLastMoveTimeAgo() + "</div>";
 	var clear = "<div class=\"clear\"></div>";
 	var end = "</li>";
 

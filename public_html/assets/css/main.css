@@ -46,6 +46,17 @@ h2
 }
 
 
+#ActionBar
+{
+	font-weight: bold;
+	margin-bottom: 1em;
+	margin-top: 2em;
+	text-align: center;
+	text-transform: lowercase;
+	visibility: hidden;
+}
+
+
 div.clear
 {
 	clear: both;

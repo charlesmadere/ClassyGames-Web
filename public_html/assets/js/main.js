@@ -1,3 +1,7 @@
+var MY_FACEBOOK_IDENTITY;
+var CURRENT_TIME;
+
+
 $(document).ready(function() {
 	$.ajaxSetup({ cache: true });
 	$.getScript("http://connect.facebook.net/en_US/all.js", function() {
@@ -21,9 +25,9 @@ $(document).ready(function() {
 function facebookLogin()
 {
 	FB.api("/me", function(response) {
+		MY_FACEBOOK_IDENTITY = new Person(response.id, response.name);
 		$("#Facebook_Login").remove();
-		$("h1").html("Games List");
-		$("#ClassyGames_GamesList").css("display", "inline");
+		$("#ActionBar").css("visibility", "visible");
 		loadGamesList(response);
 	});
 }

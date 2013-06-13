@@ -1,3 +1,6 @@
+var BOARD;
+
+
 function loadBoard(gameId, personId, personName)
 {
 	$("#ClassyGames_GamesList").css("display", "none");
@@ -13,6 +16,8 @@ function loadBoard(gameId, personId, personName)
 			$("#ClassyGames_Board_Board").css("display", "inline");
 			$("h1").html("Game against " + personName);
 			measureBoard();
+			BOARD = new Board(response);
+			BOARD.flush();
 		}
 	);
 }
@@ -20,36 +25,40 @@ function loadBoard(gameId, personId, personName)
 
 function measureBoard()
 {
-	var body = $("body");
-	var bodyWidth = body.width();
 	var board = $("#ClassyGames_Board_Board");
-	board.height(bodyWidth);
-	board.width(bodyWidth);
 
-	var rows = board.children();
-	var rowHeight = bodyWidth / 8;
-
-	for (var i = 0; i < rows.length; ++i)
+	if (board.css("display") === "inline")
 	{
-		var row = rows[i];
+		var body = $("body");
+		var bodyWidth = body.width();
+		board.height(bodyWidth);
+		board.width(bodyWidth);
 
-		if (row.className === "ClassyGames_Board_Board_Row")
+		var rows = board.children();
+		var rowHeight = bodyWidth / 8;
+
+		for (var i = 0; i < rows.length; ++i)
 		{
-			row.style.height = rowHeight + "px";
-			var positions = row.childNodes;
+			var row = rows[i];
 
-			for (var j = 0; j < positions.length; ++j)
+			if (row.className === "ClassyGames_Board_Board_Row")
 			{
-				var position = positions[j];
-				var piece = position.childNodes;
+				row.style.height = rowHeight + "px";
+				var positions = row.childNodes;
 
-				for (var k = 0; k < piece.length; ++k)
+				for (var j = 0; j < positions.length; ++j)
 				{
-					var pieceImage = piece[k];
+					var position = positions[j];
+					var piece = position.childNodes;
 
-					if (pieceImage.tagName === "IMG")
+					for (var k = 0; k < piece.length; ++k)
 					{
-						resizePieceImage(pieceImage, rowHeight);
+						var pieceImage = piece[k];
+
+						if (pieceImage.tagName === "IMG")
+						{
+							resizePieceImage(pieceImage, rowHeight);
+						}
 					}
 				}
 			}
@@ -58,13 +67,78 @@ function measureBoard()
 }
 
 
-function showPositionInfo(position)
+function selectBoardPosition(position)
 {
 	var x = position.getAttribute("data-x");
 	var y = position.getAttribute("data-y");
-	var textToShow = "x: " + x + ", y: " + y;
+	alert("(" + x + ", " + y + ")");
+}
 
-	var positionInfo = document.getElementById("positionInfo");
-	positionInfo.innerHTML = textToShow;
-	positionInfo.style.display = "block";
+
+function Board(response)
+{
+	this.response = response.result.success;
+	this.json = JSON.parse(this.response);
+	this.board = this.json.board;
+	this.teams = this.board.teams;
+	this.teamPlayer = this.buildTeam(1, this.teams[0]);
+	this.teamOpponent = this.buildTeam(2, this.teams[1]);
+}
+
+
+Board.prototype.buildTeam = function(team, array)
+{
+	var builtTeam = new Array(array.length);
+
+	for (var i = 0; i < array.length; ++i)
+	{
+		builtTeam[i] = new Piece(team, array[i])
+	}
+
+	return builtTeam;
+}
+
+
+Board.prototype.flush = function()
+{
+	var board = $("#ClassyGames_Board_Board");
+
+	this.flushTeam(board, this.teamPlayer);
+	this.flushTeam(board, this.teamOpponent);
+}
+
+
+Board.prototype.flushTeam = function(board, team)
+{
+	for (var i = 0; i < team.length; ++i)
+	{
+		var piece = team[i];
+		var x = piece.coordinate.x;
+		var y = piece.coordinate.y;
+
+		var position = $("[data-x=" + x + "][data-y=" + y + "]");
+
+		if (piece.isPlayerPiece())
+		{
+			if (piece.isNormalPiece())
+			{
+				position.html("<img src=\"assets/img/game/normal/pink/piece.png\" />");
+			}
+			else
+			{
+				position.html("<img src=\"assets/img/game/king/pink/piece.png\" />");
+			}
+		}
+		else
+		{
+			if (piece.isNormalPiece())
+			{
+				position.html("<img src=\"assets/img/game/normal/blue/piece.png\" />");
+			}
+			else
+			{
+				position.html("<img src=\"assets/img/game/king/blue/piece.png\" />");
+			}
+		}
+	}
 }
