@@ -16,8 +16,6 @@ body
 	margin-right: auto;
 	margin-top: 0em;
 	max-width: 32em;
-	padding-left: 1em;
-	padding-right: 1em;
 }
 
 
@@ -30,7 +28,19 @@ h1, h2
 
 h1
 {
+	background-image: url("../img/header.png");
+	color: #FFFFFF;
+	margin-left: 0em;
+	margin-right: 0em;
 	margin-top: 0em;
+	padding-bottom: 0.25em;
+	padding-top: 0.25em;
+}
+
+
+h2
+{
+	color: #8A9AA1;
 }
 
 
@@ -43,6 +53,9 @@ h1
 #ClassyGames_GamesList ul
 {
 	list-style-type: none;
+	margin-left: 2em;
+	margin-right: 2em;
+	padding-left: 0em;
 }
 
 

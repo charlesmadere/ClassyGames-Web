@@ -1,7 +1,7 @@
 function Game(game)
 {
-	this.gameId = game.game_id;
-	this.gameType = game.game_type;
+	this.id = game.game_id;
+	this.type = game.game_type;
 	this.lastMove = game.last_move;
 	this.person = new Person(game.id, game.name);
 }
@@ -114,7 +114,7 @@ Game.prototype.print = function()
 
 Game.prototype.toList = function(currentTime)
 {
-	var begin = "<li>";
+	var begin = "<li onclick=\"loadGame('" + this.id + "');\" onmouseover=\"highlightGame(this)\" onmouseout=\"unhighlightGame(this)\">";
 	var img = "<img src=\"https://graph.facebook.com/" + this.person.id + "/picture?type=square\" />";
 	var name = "<div class=\"ClassyGames_GamesList_Game_Name\">" + this.person.name + "</div>";
 	var time = "<div class=\"ClassyGames_GamesList_Game_Time\">" + this.calculateLastMoveTimeAgo(currentTime) + "</div>";
@@ -127,5 +127,5 @@ Game.prototype.toList = function(currentTime)
 
 Game.prototype.toString = function()
 {
-	return this.gameId + " " + this.gameType + " " + this.lastMove + " " + this.person.toString();
+	return this.id + " " + this.type + " " + this.lastMove + " " + this.person.toString();
 }

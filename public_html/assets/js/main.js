@@ -44,7 +44,7 @@ function loadGamesList(response)
 			loadGamesListTurn(turnYours, "#ClassyGames_GamesList_YourTurn_List", currentTime);
 			loadGamesListTurn(turnTheirs, "#ClassyGames_GamesList_TheirTurn_List", currentTime);
 
-			$("#ClassyGames_GamesList_Loading").css("display", "none");
+			$("#ClassyGames_GamesList_Loading").remove();
 		}
 	);
 }
@@ -63,4 +63,22 @@ function loadGamesListTurn(turn, list, currentTime)
 			$(list).append(html);
 		}
 	}
+}
+
+
+function highlightGame(element)
+{
+	$(element).css("background-color", "#FFFFFF");
+}
+
+
+function unhighlightGame(element)
+{
+	$(element).css("background-color", "");
+}
+
+
+function loadGame(id)
+{
+	alert(id);
 }
