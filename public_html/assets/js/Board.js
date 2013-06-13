@@ -39,7 +39,8 @@ function loadBoard(gameId, personId, personName)
 			$("#ClassyGames_Board_ActionBar").css("display", "inline");
 			$("h1").html("Game against " + personName);
 			measureBoard();
-			BOARD = new Board(response);
+			var person = new Person(personId, personName);
+			BOARD = new Board(response, gameId, person);
 			BOARD.flush();
 		}
 	);
@@ -102,8 +103,10 @@ function selectBoardPosition(position)
 }
 
 
-function Board(response)
+function Board(response, gameId, person)
 {
+	this.gameId = gameId;
+	this.person = person;
 	this.response = response.result.success;
 	this.json = JSON.parse(this.response);
 	this.board = this.json.board;
@@ -237,6 +240,12 @@ Board.prototype.flushTeam = function(board, team)
 }
 
 
+Board.prototype.makeBoardJSON = function()
+{
+	return "blah";
+}
+
+
 Board.prototype.selectPiece = function(coordinate)
 {
 	var piece = this.findPieceAtPosition(coordinate);
@@ -317,6 +326,29 @@ Board.prototype.selectPiece = function(coordinate)
 	else
 	{
 		this.unselectPiece();
+	}
+}
+
+
+Board.prototype.send = function()
+{
+	if (this.isLocked || this.lastMovedCoordinate != null)
+	{
+		// this line requires that google chrome's security feature be disabled
+		$.post("http://classygames.net/NewMove",
+			{
+				user_challenged: this.person.id,
+				name: this.person.name,
+				user_creator: MY_FACEBOOK_IDENTITY.id,
+				game_id: this.gameId,
+				board: this.makeBoardJSON()
+			},
+			function(response)
+			{
+				console.log(response);
+				loadGamesList();
+			}
+		);
 	}
 }
 
