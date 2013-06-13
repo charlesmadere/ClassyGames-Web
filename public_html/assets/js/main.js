@@ -66,18 +66,6 @@ function loadGamesListTurn(turn, list, currentTime)
 }
 
 
-function highlightGame(element)
-{
-	$(element).css("background-color", "#FFFFFF");
-}
-
-
-function unhighlightGame(element)
-{
-	$(element).css("background-color", "");
-}
-
-
 function loadGame(id)
 {
 	alert(id);
